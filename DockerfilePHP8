@@ -1,0 +1,72 @@
+FROM php:8-fpm
+
+RUN apk add --no-cache --update \
+  bzip2-dev \
+  enchant2-dev \
+  libpng-dev \
+  gmp-dev \
+  imap-dev \
+  icu-dev \
+  openldap-dev \
+  freetds-dev \
+  postgresql-dev \
+  aspell-dev \
+  net-snmp-dev \
+  libxml2-dev \
+  tidyhtml-dev  \
+  libxslt-dev \
+  libzip-dev
+
+RUN docker-php-ext-install \
+  bcmath \
+  bz2 \
+  calendar \
+  dba \
+  enchant \
+  exif \
+  ffi \
+  gd \
+  gettext \
+  gmp \
+  imap \
+  intl \
+  ldap \
+  mysqli \
+  opcache \
+  pcntl \
+  pdo_dblib \
+  pdo_mysql \
+  pdo_pgsql \
+  pgsql \
+  pspell \
+  shmop \
+  snmp \
+  soap \
+  sockets \
+  sysvmsg \
+  sysvsem \
+  sysvshm \
+  tidy \
+  xsl \
+  zend_test \
+  zip
+
+RUN apt-get update && apt-get install -y libmcrypt-dev \
+    mysql-client libmagickwand-dev --no-install-recommends \
+    git \
+    curl \
+    zip \
+    vim \
+    unzip \
+    && pecl install imagick \
+    && docker-php-ext-enable imagick
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- \
+--install-dir=/usr/bin --filename=composer && chmod +x /usr/bin/composer
+
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+RUN rm -rf /tmp/* /var/cache/apk/* \
+  && echo "=============================================" \
+  && php -m
