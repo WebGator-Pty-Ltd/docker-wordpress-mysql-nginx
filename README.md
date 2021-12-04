@@ -1,5 +1,10 @@
-# docker-wordpress-mysql-nginx
+# Docker-wordpress-mysql-nginx
 Simple docker-compose for WordPress, with mysql, reddis, nginx and php-fpm
+
+```
+Run http://localhost:8080/
+
+```
 
 # usage:
 + `docker-compose up -d` to start all containers
